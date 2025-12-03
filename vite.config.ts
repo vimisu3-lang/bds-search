@@ -4,5 +4,19 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: './', // Quan trọng: Đảm bảo đường dẫn tài nguyên đúng khi deploy lên sub-folder GitHub Pages
+  // Quan trọng: Sử dụng đường dẫn tương đối để file HTML có thể load JS/CSS 
+  // dù được deploy ở domain gốc hay sub-folder (ví dụ: username.github.io/repo-name)
+  base: './', 
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+    // Tối ưu hóa việc chia nhỏ file để browser cache tốt hơn
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'lucide-react'],
+        },
+      },
+    },
+  },
 })
