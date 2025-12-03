@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Copy, Check } from 'lucide-react';
+import { ChevronDown, Copy, Check } from 'lucide-react';
 import { QnA } from '../types';
 import { normalizeText } from '../utils';
 
@@ -26,22 +26,12 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ item, searchQuery }) => {
     if (!query) return text;
 
     const normalizedQuery = normalizeText(query);
-    // Escape regex characters
-    const parts = text.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').split(' ').join('|')})`, 'gi'));
-    
-    // Simple splitting by spaces might be too aggressive, let's try a safer approach:
-    // If exact phrase match is found, great. If not, just return text. 
-    // Implementing a robust fuzzy highlighter is complex, let's stick to case-insensitive highlighting of the query string if present.
     
     // Better strategy for this context: highlight if the exact continuous query string exists (case insensitive)
     const index = normalizeText(text).indexOf(normalizedQuery);
     if (index === -1) return text;
 
     // This is a simplified visual highlighter. 
-    // A robust one would require mapping normalized indices back to original indices.
-    // For simplicity and performance, we will just return the text as is if we can't easily map it, 
-    // or use a simple split if the exact string matches.
-    
     const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
     const match = text.match(regex);
     
